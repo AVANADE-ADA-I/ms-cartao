@@ -13,6 +13,9 @@ import tech.ada.bootcamp.arquitetura.cartaoservice.services.CartaoService;
 import tech.ada.bootcamp.arquitetura.cartaoservice.services.CompraService;
 import tech.ada.bootcamp.arquitetura.cartaoservice.services.UsuarioService;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 public class CriarCompraPresenter {
     private CompraService compraService;
@@ -26,5 +29,4 @@ public class CriarCompraPresenter {
         Cartao cartao = cartaoService.getCartao(dto.numeroCartao());
         return compraService.execute(dto, cartao);
     }
-
 }
