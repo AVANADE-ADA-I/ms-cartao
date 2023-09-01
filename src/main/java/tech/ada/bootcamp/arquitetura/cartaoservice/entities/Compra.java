@@ -42,6 +42,6 @@ public class Compra {
                 this.cartao.getNumeroCartao(),
                 this.loja,
                 this.valor,
-                this.statusCompra)
+                this.statusCompra);
     }
 }

@@ -16,6 +16,7 @@ public class CompraService {
 
     public CompraResponse execute(CompraRequest dto, Cartao cartao) {
         var compra = new Compra(dto, cartao);
-        return compra.dto();
+        var compraRegistrada = compraRepository.save(compra);
+        return compraRegistrada.dto();
     }
 }
