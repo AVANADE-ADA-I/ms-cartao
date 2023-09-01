@@ -27,7 +27,9 @@
             <column name="codigo_seguranca" type="character varying(255)">
                 <constraints nullable="false" />
             </column>
-
+            <column name="dia_vencimento" type="character varying(255)">
+                <constraints nullable="false" />
+            </column>
             <column name="tipo_cartao" type="character varying(255)">
                 <constraints nullable="false" />
             </column>

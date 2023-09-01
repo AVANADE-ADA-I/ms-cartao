@@ -25,13 +25,13 @@ public class CriarCartaoPresenter {
 
     public CadastroUsuarioResponse execute(CadastroPrincipalRequest dto){
         Principal titular = usuarioService.criarPrincipal(dto);
-        return cartaoService.cartaoTitular(titular, dto.tipoCartao());
+        return cartaoService.cartaoTitular(titular, dto.tipoCartao(), dto.diaVencimento());
     }
 
     public CadastroUsuarioResponse execute(CadastroDependenteRequest dto){
         Principal titular = usuarioService.getPrincipal(dto.identificadorTitular());
-        Dependente dependente = usuarioService.criarDependente(dto);
-        return cartaoService.cartaoDependente(dependente, titular, dto.tipoCartao());
+        Dependente dependente = usuarioService.criarDependente(dto, titular);
+        return cartaoService.cartaoDependente(dependente, titular, dto.tipoCartao(), dto.diaVencimento());
     }
 
 }
