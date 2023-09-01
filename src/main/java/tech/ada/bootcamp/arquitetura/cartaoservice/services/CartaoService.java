@@ -1,5 +1,6 @@
 package tech.ada.bootcamp.arquitetura.cartaoservice.services;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import tech.ada.bootcamp.arquitetura.cartaoservice.entities.Cartao;
 import tech.ada.bootcamp.arquitetura.cartaoservice.entities.Dependente;
@@ -36,7 +37,13 @@ public class CartaoService {
         return cartaoCadastrado.dto(titular.getNome());
     }
 
-
+    public Cartao getCartao(String numeroCartao) {
+        var cartao = cartaoRepository.findByNumeroCartao(numeroCartao);
+        if (cartao.isEmpty()) {
+            throw new EntityNotFoundException("Cartão informado não existe");
+        }
+        return cartao.get();
+    }
 
     private Cartao emitirCartaoTitular(Principal principal, TipoCartao tipoCartao) {
         LocalDate dataAtual = LocalDate.now();

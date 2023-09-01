@@ -1,9 +1,8 @@
 package tech.ada.bootcamp.arquitetura.cartaoservice.payloads.response;
 
-import lombok.Data;
+import java.math.BigDecimal;
 
-@Data
-public class CompraResponse {
+public record CompraResponse (String numeroCartao, String loja, BigDecimal valor, String ){
     private String numeroCartao;
     private String loja;
     private double valor;
