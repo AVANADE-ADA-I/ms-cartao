@@ -3,7 +3,6 @@ package tech.ada.bootcamp.arquitetura.cartaoservice.controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.response.FaturaResponse;
-import tech.ada.bootcamp.arquitetura.cartaoservice.presenters.CriarCartaoPresenter;
 import tech.ada.bootcamp.arquitetura.cartaoservice.presenters.PegarFaturaPresenter;
 
 
