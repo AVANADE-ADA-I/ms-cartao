@@ -31,7 +31,7 @@ public class FaturaService {
             throw new IllegalArgumentException("Cartão não encontrado");
         }
         LocalDate dataVencimento = LocalDate.of(year, month, cartao.getDiaVencimento());
-        Fatura fatura = faturaRepository.pegarFatura(numeroCartao, dataVencimento);
+        Fatura fatura = faturaRepository.findByDataVencimentoAndCartao(dataVencimento,cartao);
 
         if(fatura.isEmpty()) {
             return this.criarFatura(cartao, dataVencimento);
@@ -42,12 +42,12 @@ public class FaturaService {
 
     private Fatura criarFatura( Cartao cartao,  LocalDate dataVencimento) {
 
-            LocalDate dataFinal = dataVencimento.minusDays(diasParaSubtrair);
+        LocalDate dataFinal = dataVencimento.minusDays(diasParaSubtrair);
         LocalDate dataInicial = dataFinal.minusMonths(1).plusDays(1);
 
         List<Compra> compras = compraRepository.findByCardAndDateBetween(numeroCartao, dataInicial, dataFinal);
         BigDecimal totalCompras = compras.stream().map(Compra::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
-        BigDecimal valor = totalCompras.add(this.balancoFaturaAnterior(numeroCartao, dataVencimento));
+        BigDecimal valor = totalCompras.add(this.balancoFaturaAnterior(cartao, dataVencimento));
 
         Fatura novaFatura = new Fatura(dataVencimento, dataInicial,valor, BigDecimal.ZERO, cartao );
         faturaRepository.save(novaFatura);
@@ -55,11 +55,11 @@ public class FaturaService {
     }
 
 
-    private BigDecimal balancoFaturaAnterior(String numeroCartao, LocalDate dataVencimento) {
+    private BigDecimal balancoFaturaAnterior(Cartao cartao, LocalDate dataVencimento) {
 
         LocalDate dataVencimentoAnterior = dataVencimento.minusMonths(1);
-        var faturaAnterior = faturaRepository.pegarFatura(numeroCartao, dataVencimentoAnterior);
+        var faturaAnterior = faturaRepository.findByDataVencimentoAndCartao(dataVencimentoAnterior, cartao);
 
-        return faturaAnterior.isEmpty() ? BigDecimal.ZERO : faturaAnterior.getValor() - faturaAnterior.getValorPago();
+        return faturaAnterior.isEmpty() ? BigDecimal.ZERO : faturaAnterior.getValor().subtract(faturaAnterior.getValorPago());
     }
 }
