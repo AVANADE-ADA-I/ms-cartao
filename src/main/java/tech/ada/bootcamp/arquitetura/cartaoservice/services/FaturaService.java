@@ -25,13 +25,24 @@ public class FaturaService {
         this.compraRepository = compraRepository;
     }
 
-    public Fatura criarFatura(String numeroCartao, int month, int year) {
+    public Fatura pegarFatura(String numeroCartao, int month, int year) {
         Cartao cartao = cartaoRepository.findById(numeroCartao);
         if (cartao.isEmpty()) {
             throw new IllegalArgumentException("Cartão não encontrado");
         }
-        LocalDate dataVencimento = LocalDate.of(year, month, card.getDueDay());
-        LocalDate dataFinal = dataVencimento.minusDays(diasParaSubtrair);
+        LocalDate dataVencimento = LocalDate.of(year, month, cartao.getDiaVencimento());
+        Fatura fatura = faturaRepository.pegarFatura(numeroCartao, dataVencimento);
+
+        if(fatura.isEmpty()) {
+            return this.criarFatura(cartao, dataVencimento);
+        }
+
+        return fatura;
+    }
+
+    private Fatura criarFatura( Cartao cartao,  LocalDate dataVencimento) {
+
+            LocalDate dataFinal = dataVencimento.minusDays(diasParaSubtrair);
         LocalDate dataInicial = dataFinal.minusMonths(1).plusDays(1);
 
         List<Compra> compras = compraRepository.findByCardAndDateBetween(numeroCartao, dataInicial, dataFinal);
