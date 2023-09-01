@@ -1,5 +1,6 @@
 package tech.ada.bootcamp.arquitetura.cartaoservice.payloads.request;
 
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -13,5 +14,6 @@ public record CompraRequest (
         @NotBlank
         String loja,
         @NotNull
+        @Digits(integer = 5, fraction = 2)
         BigDecimal valor){
 }
