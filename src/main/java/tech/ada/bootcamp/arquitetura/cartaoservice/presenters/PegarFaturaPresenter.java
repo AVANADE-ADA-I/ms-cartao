@@ -11,12 +11,10 @@ public class PegarFaturaPresenter {
 
     public PegarFaturaPresenter(FaturaService faturaService) {
         this.faturaService = faturaService;
-
     }
 
     public FaturaResponse execute(String numeroCartao, int month, int year){
         return faturaService.pegarFatura(numeroCartao, month, year);
-
     }
 }
 
