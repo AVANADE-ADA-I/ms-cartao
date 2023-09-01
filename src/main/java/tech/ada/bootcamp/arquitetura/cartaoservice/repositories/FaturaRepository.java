@@ -8,11 +8,13 @@ import tech.ada.bootcamp.arquitetura.cartaoservice.entities.Fatura;
 import tech.ada.bootcamp.arquitetura.cartaoservice.entities.Cartao;
 
 import java.time.LocalDate;
+import java.util.Optional;
+
 
 
 @Repository
 public interface FaturaRepository extends JpaRepository<Fatura, Long> {
 
     @Query("SELECT f FROM Fatura f WHERE f.dataVencimento = :dataVencimento AND f.cartao = :cartao")
-    Fatura findByDataVencimentoAndCartao(@Param("dataVencimento") LocalDate dataVencimento, @Param("cartao") Cartao cartao);
+    Optional<Fatura> findByDataVencimentoAndCartao(@Param("dataVencimento") LocalDate dataVencimento, @Param("cartao") Cartao cartao);
 }
