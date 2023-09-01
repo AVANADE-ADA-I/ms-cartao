@@ -1,12 +1,9 @@
 package tech.ada.bootcamp.arquitetura.cartaoservice.payloads.response;
 
-import lombok.Data;
+import tech.ada.bootcamp.arquitetura.cartaoservice.entities.StatusCompra;
 
-@Data
-public class CompraResponse {
-    private String numeroCartao;
-    private String loja;
-    private double valor;
+import java.math.BigDecimal;
 
-    private String statusCompra;
+public record CompraResponse (String numeroCartao, String loja, BigDecimal valor, StatusCompra statusCompra){
+
 }
