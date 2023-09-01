@@ -1,18 +1,27 @@
 package tech.ada.bootcamp.arquitetura.cartaoservice.payloads.response;
 
 import lombok.Data;
+import tech.ada.bootcamp.arquitetura.cartaoservice.entities.Fatura;
+import tech.ada.bootcamp.arquitetura.cartaoservice.entities.Principal;
+import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.request.CadastroDependenteRequest;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
 public class FaturaResponse {
-    private double valor;
+    private BigDecimal valor;
     private LocalDate dataFaturaGerada;
 
     private LocalDate referenciaFatura;
 
     private List<CompraResponse> resumoCompra;
 
-
+    public FaturaResponse(Fatura fatura, List<CompraResponse> resumoCompra) {
+        this.valor = fatura.getValor();
+        this.referenciaFatura = fatura.getDataVencimento();
+        this.dataFaturaGerada = fatura.getDataProcessamento();
+        this.resumoCompra = resumoCompra;
+    }
 }
