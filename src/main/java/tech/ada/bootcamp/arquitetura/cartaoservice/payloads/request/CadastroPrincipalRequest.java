@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.br.CPF;
+import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.DiaVencimento;
 import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.TipoCartao;
 
 import java.util.List;
@@ -22,5 +23,7 @@ public record CadastroPrincipalRequest (
         @Valid
         EnderecoRequest endereco,
         @NotNull
-        TipoCartao tipoCartao){
+        TipoCartao tipoCartao,
+        @NotNull
+        DiaVencimento diaVencimento){
 }
