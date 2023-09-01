@@ -58,7 +58,7 @@ public class CartaoService {
     }
 
     private Cartao getCartaoPrincipal(Principal principal) {
-        var cartao = cartaoRepository.findByPrincipalAndDependenteIsNull(principal);
+        var cartao = cartaoRepository.findFirstByPrincipalAndDependenteIsNullOrderByTipoCartaoDesc(principal);
         if (cartao.isEmpty()) {
             throw new EntityNotFoundException("Cartão informado não existe");
         }

@@ -11,5 +11,5 @@ import java.util.Optional;
 @Repository
 public interface CartaoRepository extends JpaRepository<Cartao, String> {
     Optional<Cartao> findByNumeroCartao (String numeroCartao);
-    Optional<Cartao> findByPrincipalAndDependenteIsNull (Principal principal);
+    Optional<Cartao> findFirstByPrincipalAndDependenteIsNullOrderByTipoCartaoDesc (Principal principal);
 }

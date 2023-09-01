@@ -14,6 +14,6 @@ public record CompraRequest (
         @NotBlank
         String loja,
         @NotNull
-        @Digits(integer = 5, fraction = 2)
+        @Digits(integer = 5, fraction = 2, message = "valor deve possuir no máximo 5 casas inteiras e 2 decimais.")
         BigDecimal valor){
 }
