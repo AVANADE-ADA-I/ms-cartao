@@ -3,6 +3,7 @@ package tech.ada.bootcamp.arquitetura.cartaoservice.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.request.EnderecoRequest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -28,5 +29,14 @@ public class Fatura {
     @ManyToOne
     @JoinColumn(name = "numeroCartao")
     private Cartao cartao;
+
+
+    public Fatura(LocalDate dataVencimento, LocalDate dataProcessamento, BigDecimal valor, BigDecimal valorPago, Cartao cartao ) {
+        this.dataVencimento = dataVencimento;
+        this.dataProcessamento = dataProcessamento;
+        this.valor = valor;
+        this.valorPago = valorPago;
+        this.cartao = cartao;
+    }
 
 }
