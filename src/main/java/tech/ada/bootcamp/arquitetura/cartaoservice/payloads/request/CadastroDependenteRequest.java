@@ -3,6 +3,7 @@ package tech.ada.bootcamp.arquitetura.cartaoservice.payloads.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.DiaVencimento;
 import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.TipoCartao;
 
 import java.util.List;
@@ -20,5 +21,8 @@ public record CadastroDependenteRequest (
         @NotBlank
         String nome,
         @NotNull
-        TipoCartao tipoCartao){
+        TipoCartao tipoCartao,
+        @NotNull
+        DiaVencimento diaVencimento
+){
 }

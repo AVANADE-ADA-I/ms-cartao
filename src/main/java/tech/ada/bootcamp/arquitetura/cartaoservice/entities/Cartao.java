@@ -2,6 +2,7 @@ package tech.ada.bootcamp.arquitetura.cartaoservice.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.DiaVencimento;
 import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.TipoCartao;
 import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.response.CadastroUsuarioResponse;
 
@@ -17,6 +18,7 @@ public class Cartao {
     private LocalDate vencimentoCartao;
 
     private String codigoSeguranca;
+    private DiaVencimento diaVencimento;
 
     private TipoCartao tipoCartao;
 

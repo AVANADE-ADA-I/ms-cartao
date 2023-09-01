@@ -48,10 +48,7 @@ class UsuarioServiceTest {
 
     @Test
     void criarDependente() {
-        when(principalRepository.findById(anyString())).thenReturn(Optional.of(principal));
-        service.criarDependente(dependenteDto);
-
-        verify(principalRepository, times(1)).findById(principal.getIdentificador());
+        service.criarDependente(dependenteDto, principal);
 
         ArgumentCaptor<Dependente> dependenteArgumentCaptor = ArgumentCaptor.forClass(Dependente.class);
         verify(dependenteRepository, times(1))
