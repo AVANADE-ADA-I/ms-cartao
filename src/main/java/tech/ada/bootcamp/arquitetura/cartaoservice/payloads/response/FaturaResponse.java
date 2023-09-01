@@ -2,8 +2,6 @@ package tech.ada.bootcamp.arquitetura.cartaoservice.payloads.response;
 
 import lombok.Data;
 import tech.ada.bootcamp.arquitetura.cartaoservice.entities.Fatura;
-import tech.ada.bootcamp.arquitetura.cartaoservice.entities.Principal;
-import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.request.CadastroDependenteRequest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
