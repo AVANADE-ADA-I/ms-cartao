@@ -34,37 +34,38 @@ public class FaturaService {
         if(fatura.isEmpty()) {
             return this.criarFatura(cartao, dataVencimento);
         }
-
-        LocalDate dataFinal = dataVencimento.minusDays(diasParaSubtrair);
-        LocalDate dataInicial = dataFinal.minusMonths(1).plusDays(1);
-
-        List<CompraResponse> compras = compraService.getCompra(cartao, dataInicial.atStartOfDay(), dataFinal.atTime(LocalTime.MAX));
+        List<CompraResponse> compras = this.pegarCompras(cartao, dataVencimento);
 
         return new FaturaResponse(fatura.get(),compras);
     }
 
     private FaturaResponse criarFatura( Cartao cartao,  LocalDate dataVencimento) {
 
-        LocalDate dataFinal = dataVencimento.minusDays(diasParaSubtrair);
-        LocalDate dataInicial = dataFinal.minusMonths(1).plusDays(1);
-
-        List<CompraResponse> compras = compraService.getCompra(cartao, dataInicial.atStartOfDay(), dataFinal.atTime(LocalTime.MAX));
+        List<CompraResponse> compras = this.pegarCompras(cartao, dataVencimento);
         BigDecimal totalCompras = compras.stream()
                 .map(CompraResponse::valor)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal valor = totalCompras.add(this.balancoFaturaAnterior(cartao, dataVencimento));
 
-        Fatura novaFatura = new Fatura(dataVencimento, dataInicial,valor, BigDecimal.ZERO, cartao );
+        LocalDate dataFinal = dataVencimento.minusDays(diasParaSubtrair);
+
+        Fatura novaFatura = new Fatura(dataVencimento, dataFinal,valor, BigDecimal.ZERO, cartao );
         faturaRepository.save(novaFatura);
         return new FaturaResponse(novaFatura,compras);
     }
 
 
     private BigDecimal balancoFaturaAnterior(Cartao cartao, LocalDate dataVencimento) {
-
         LocalDate dataVencimentoAnterior = dataVencimento.minusMonths(1);
         var faturaAnterior = faturaRepository.findByDataVencimentoAndCartao(dataVencimentoAnterior, cartao);
 
         return faturaAnterior.map(fatura -> fatura.getValor().subtract(fatura.getValorPago())).orElse(BigDecimal.ZERO);
+    }
+
+    private List<CompraResponse> pegarCompras(Cartao cartao,  LocalDate dataVencimento){
+        LocalDate dataFinal = dataVencimento.minusDays(diasParaSubtrair);
+        LocalDate dataInicial = dataFinal.minusMonths(1).plusDays(1);
+
+        return compraService.getCompra(cartao, dataInicial.atStartOfDay(), dataFinal.atTime(LocalTime.MAX));
     }
   }
