@@ -33,7 +33,6 @@ public class Compra {
         this.dataCompra = LocalDateTime.now();
         this.loja = dto.loja();
         this.valor = dto.valor();
-        this.statusCompra = StatusCompra.FINALIZADA;
         this.cartao = cartao;
     }
 

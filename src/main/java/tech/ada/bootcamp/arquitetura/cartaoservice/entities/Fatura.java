@@ -2,6 +2,7 @@ package tech.ada.bootcamp.arquitetura.cartaoservice.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.request.EnderecoRequest;
 
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @Table(name = "fatura")
+@NoArgsConstructor
 public class Fatura {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

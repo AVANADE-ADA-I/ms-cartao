@@ -46,11 +46,4 @@ public class UsuarioService {
         }
         return principalOp.get();
     }
-    public List<Principal> getAllPrincipal() {
-        return principalRepository.findAll();
-    }
-
-    public List<Dependente> getAllDependente() {
-        return dependenteRepository.findAll();
-    }
 }

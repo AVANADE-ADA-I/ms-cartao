@@ -1,5 +1,6 @@
 package tech.ada.bootcamp.arquitetura.cartaoservice.controllers;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.request.CompraRequest;
@@ -20,7 +21,7 @@ public class RealizarCompraController {
     }
 
     @PostMapping(path = "", produces = "application/json" )
-    public CompraResponse realizarCompra(@RequestBody CompraRequest compraRequest){
+    public CompraResponse realizarCompra(@RequestBody @Valid CompraRequest compraRequest){
         return compraPresenter.execute(compraRequest);
     }
 }
