@@ -25,5 +25,5 @@ public record CadastroPrincipalRequest (
         @NotNull
         TipoCartao tipoCartao,
         @NotNull
-        DiaVencimento diaVencimento){
-}
+        DiaVencimento diaVencimento
+){}
