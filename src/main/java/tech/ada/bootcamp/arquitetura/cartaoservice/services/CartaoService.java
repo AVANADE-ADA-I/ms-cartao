@@ -4,12 +4,14 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import tech.ada.bootcamp.arquitetura.cartaoservice.entities.Cartao;
 import tech.ada.bootcamp.arquitetura.cartaoservice.entities.Dependente;
+import tech.ada.bootcamp.arquitetura.cartaoservice.entities.Endereco;
 import tech.ada.bootcamp.arquitetura.cartaoservice.entities.Principal;
 import tech.ada.bootcamp.arquitetura.cartaoservice.exceptions.AppException;
 import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.DiaVencimento;
 import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.TipoCartao;
 import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.request.CadastroDependenteRequest;
 import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.request.CadastroPrincipalRequest;
+import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.request.EnderecoDTO;
 import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.response.CadastroUsuarioResponse;
 import tech.ada.bootcamp.arquitetura.cartaoservice.repositories.CartaoRepository;
 
@@ -27,16 +29,23 @@ public class CartaoService {
     }
 
 
-    public CadastroUsuarioResponse cartaoTitular(Principal titular, TipoCartao tipoCartao, DiaVencimento diaVencimento){
+    public CadastroUsuarioResponse cartaoTitular(Principal titular, Endereco endereco, TipoCartao tipoCartao, DiaVencimento diaVencimento){
         var cartao = new Cartao(titular, tipoCartao, diaVencimento);
         cartao.setCodigoSeguranca(gerarNumeroAleatorio(3));
         cartao.setNumeroCartao(gerarNumeroAleatorio(12));
 
         var cartaoCadastrado = cartaoRepository.save(cartao);
-        return cartaoCadastrado.dto(titular.getNome());
+        return new CadastroUsuarioResponse(
+                cartaoCadastrado.getNumeroCartao(),
+                cartaoCadastrado.getNomeTitular(),
+                cartaoCadastrado.getDiaVencimento(),
+                cartaoCadastrado.getTipoCartao(),
+                titular.getNome(),
+                endereco.dto()
+                );
     }
 
-    public CadastroUsuarioResponse cartaoDependente(Dependente dependente, Principal titular, TipoCartao tipoCartao, DiaVencimento diaVencimento){
+    public CadastroUsuarioResponse cartaoDependente(Dependente dependente, Principal titular, Endereco endereco, TipoCartao tipoCartao, DiaVencimento diaVencimento){
         var cartaoTitular = getCartaoPrincipal(titular);
         if (cartaoTitular.getTipoCartao().getValor() < tipoCartao.getValor()) {
             throw new AppException("Tipo do cartão deve ser igual ou inferior ao do titular.");
@@ -46,15 +55,14 @@ public class CartaoService {
         cartao.setNumeroCartao(gerarNumeroAleatorio(12));
 
         var cartaoCadastrado = cartaoRepository.save(cartao);
-        return cartaoCadastrado.dto(titular.getNome());
-    }
-
-    public Cartao getCartao(String numeroCartao) {
-        var cartao = cartaoRepository.findByNumeroCartao(numeroCartao);
-        if (cartao.isEmpty()) {
-            throw new EntityNotFoundException("Cartão informado não existe");
-        }
-        return cartao.get();
+        return new CadastroUsuarioResponse(
+                cartaoCadastrado.getNumeroCartao(),
+                cartaoCadastrado.getNomeTitular(),
+                cartaoCadastrado.getDiaVencimento(),
+                cartaoCadastrado.getTipoCartao(),
+                titular.getNome(),
+                endereco.dto()
+        );
     }
 
     private Cartao getCartaoPrincipal(Principal principal) {

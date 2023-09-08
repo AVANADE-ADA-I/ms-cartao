@@ -46,4 +46,12 @@ public class UsuarioService {
         }
         return principalOp.get();
     }
+
+    public Endereco getEndereco(String idTitular) {
+        var enderecoOp = enderecoRepository.findByPrincipalIdentificador(idTitular);
+        if(enderecoOp.isEmpty()) {
+            throw new EntityNotFoundException("Endereço não encontrado.");
+        }
+        return enderecoOp.get();
+    }
 }

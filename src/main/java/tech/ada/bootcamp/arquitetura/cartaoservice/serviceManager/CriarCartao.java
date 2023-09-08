@@ -2,6 +2,7 @@ package tech.ada.bootcamp.arquitetura.cartaoservice.serviceManager;
 
 import org.springframework.stereotype.Service;
 import tech.ada.bootcamp.arquitetura.cartaoservice.entities.Dependente;
+import tech.ada.bootcamp.arquitetura.cartaoservice.entities.Endereco;
 import tech.ada.bootcamp.arquitetura.cartaoservice.entities.Principal;
 import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.request.CadastroDependenteRequest;
 import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.request.CadastroPrincipalRequest;
@@ -20,13 +21,15 @@ public class CriarCartao {
 
     public CadastroUsuarioResponse execute(CadastroPrincipalRequest dto){
         Principal titular = usuarioService.criarPrincipal(dto);
-        return cartaoService.cartaoTitular(titular, dto.tipoCartao(), dto.diaVencimento());
+        Endereco endereco = usuarioService.getEndereco(titular.getIdentificador());
+        return cartaoService.cartaoTitular(titular, endereco, dto.tipoCartao(), dto.diaVencimento());
     }
 
     public CadastroUsuarioResponse execute(CadastroDependenteRequest dto){
         Principal titular = usuarioService.getPrincipal(dto.identificadorTitular());
+        Endereco endereco = usuarioService.getEndereco(titular.getIdentificador());
         Dependente dependente = usuarioService.criarDependente(dto, titular);
-        return cartaoService.cartaoDependente(dependente, titular, dto.tipoCartao(), dto.diaVencimento());
+        return cartaoService.cartaoDependente(dependente, titular, endereco, dto.tipoCartao(), dto.diaVencimento());
     }
 
 }

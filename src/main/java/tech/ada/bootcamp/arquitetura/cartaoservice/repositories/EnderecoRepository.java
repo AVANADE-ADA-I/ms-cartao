@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface EnderecoRepository extends JpaRepository<Endereco, Long> {
-    Optional<Endereco> findByPrincipal (String principal);
+    Optional<Endereco> findByPrincipalIdentificador (String principalIdentificador);
 }

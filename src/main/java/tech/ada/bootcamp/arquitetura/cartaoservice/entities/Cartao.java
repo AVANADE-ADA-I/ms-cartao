@@ -53,13 +53,4 @@ public class Cartao {
         this.nomeTitular = dependente.getNome();
         this.vencimentoCartao = LocalDate.now().plusYears(5);
     }
-
-    public CadastroUsuarioResponse dto(String nome) {
-        return new CadastroUsuarioResponse(
-                this.numeroCartao,
-                this.nomeTitular,
-                this.tipoCartao,
-                nome
-        );
-    }
 }

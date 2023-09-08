@@ -3,7 +3,7 @@ package tech.ada.bootcamp.arquitetura.cartaoservice.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.request.EnderecoRequest;
+import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.request.EnderecoDTO;
 
 @Data
 @Entity
@@ -24,7 +24,7 @@ public class Endereco {
     @JoinColumn(name = "principal_identificador")
     private Principal principal;
 
-    public Endereco(EnderecoRequest dto, Principal principal) {
+    public Endereco(EnderecoDTO dto, Principal principal) {
         this.cep = dto.cep();
         this.rua = dto.rua();
         this.bairro = dto.bairro();
@@ -33,5 +33,9 @@ public class Endereco {
         this.complemento = dto.complemento();
         this.numero = dto.numero();
         this.principal = principal;
+    }
+
+    public EnderecoDTO dto() {
+        return new EnderecoDTO(this.cep, this.rua, this.bairro, this.cidade, this.estado, this.complemento, this.numero);
     }
 }

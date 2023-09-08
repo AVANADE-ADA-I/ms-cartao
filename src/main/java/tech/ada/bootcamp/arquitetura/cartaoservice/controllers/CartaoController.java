@@ -14,13 +14,11 @@ import tech.ada.bootcamp.arquitetura.cartaoservice.services.CartaoService;
 @RequestMapping("/cartao")
 @Slf4j
 public class CartaoController {
-    public CartaoController(CriarCartao cartao, CartaoService cartaoService) {
+    public CartaoController(CriarCartao cartao) {
         this.cartao = cartao;
-        this.cartaoService = cartaoService;
     }
 
     private CriarCartao cartao;
-    private CartaoService cartaoService;
 
     @PostMapping(path = "/principal", produces = "application/json" )
     public CadastroUsuarioResponse cadastrarUsuario(@RequestBody @Valid CadastroPrincipalRequest dto){
@@ -31,10 +29,4 @@ public class CartaoController {
     public CadastroUsuarioResponse adicionarDependente(@RequestBody @Valid CadastroDependenteRequest dto){
         return this.cartao.execute(dto);
     }
-
-    @GetMapping(path = "/{numeroCartao}", produces = "application/json" )
-    public Cartao procurarCartao(@PathVariable("numeroCartao") String numeroCartao){
-        return this.cartaoService.getCartao(numeroCartao);
-    }
-
 }
