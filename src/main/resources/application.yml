@@ -7,16 +7,8 @@ server:
       - application/json
 
 spring:
-  main:
-    allow-bean-definition-overriding: true
-  datasource:
-    url: jdbc:postgresql://localhost:5433/cartao
-    username: cartao
-    password: cartao
-    continue-on-error: true
-
   application:
-    name: cartoes-ms
+    name: cartoes-ms-orquestrador
   jpa:
     open-in-view: false
     show-sql: true
@@ -31,3 +23,11 @@ spring:
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/changelog-local.xml
+
+api:
+  criarUsuario:
+    url: https://...
+  adicionarDependente:
+    url: https://...
+  adicionarCartaoCompra:
+    url: https://...

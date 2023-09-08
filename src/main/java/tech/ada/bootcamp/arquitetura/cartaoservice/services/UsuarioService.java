@@ -1,56 +1,77 @@
 package tech.ada.bootcamp.arquitetura.cartaoservice.services;
 
-import jakarta.persistence.EntityNotFoundException;
+
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import tech.ada.bootcamp.arquitetura.cartaoservice.entities.Dependente;
-import tech.ada.bootcamp.arquitetura.cartaoservice.entities.Endereco;
-import tech.ada.bootcamp.arquitetura.cartaoservice.entities.Principal;
 import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.request.CadastroDependenteRequest;
 import tech.ada.bootcamp.arquitetura.cartaoservice.payloads.request.CadastroPrincipalRequest;
-import tech.ada.bootcamp.arquitetura.cartaoservice.repositories.DependenteRepository;
-import tech.ada.bootcamp.arquitetura.cartaoservice.repositories.EnderecoRepository;
-import tech.ada.bootcamp.arquitetura.cartaoservice.repositories.PrincipalRepository;
+import org.springframework.web.client.RestTemplate;
+
 
 import java.util.List;
 
 @Service
 public class UsuarioService {
-    private PrincipalRepository principalRepository;
-    private DependenteRepository dependenteRepository;
-    private EnderecoRepository enderecoRepository;
+    private ApiService apiService;
 
-    public UsuarioService(PrincipalRepository principalRepository, DependenteRepository dependenteRepository, EnderecoRepository enderecoRepository) {
-        this.principalRepository = principalRepository;
-        this.dependenteRepository = dependenteRepository;
-        this.enderecoRepository = enderecoRepository;
+    public UsuarioService(ApiService apiService) {
+        this.apiService = apiService;
     }
 
-    public Dependente criarDependente(CadastroDependenteRequest dto, Principal titular) {
-        var dependente = new Dependente(dto, titular);
-        dependenteRepository.save(dependente);
-        return dependente;
-    }
+    public  ResponseEntity<String> criarDependente(CadastroDependenteRequest dto) {
+        String adicionarDependenteUrl = apiService.getAdicionarDependente().getUrl();
+        String adicionarCartaoCompraUrl = apiService.getAdicionarCartaoCompra().getUrl();
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-    public Principal criarPrincipal(CadastroPrincipalRequest  dto) {
-        var principal = new Principal(dto);
-        principalRepository.save(principal);
-        var endereco = new Endereco(dto.endereco(), principal);
-        enderecoRepository.save(endereco);
-        return principal;
-    }
+        try {
+            HttpEntity<CadastroDependenteRequest> dtoToJson = new HttpEntity<>(dto, headers);
 
-    public Principal getPrincipal(String idTitular) {
-        var principalOp = principalRepository.findById(idTitular);
-        if(principalOp.isEmpty()) {
-            throw new EntityNotFoundException("Titular não encontrado.");
+            ResponseEntity<String> dependente = restTemplate.exchange(
+                    adicionarDependenteUrl,
+                    HttpMethod.POST,
+                    dtoToJson,
+                    String.class
+            );
+
+            if (dependente.getStatusCode().is2xxSuccessful()) {
+                String usuarioBody = dependente.getBody();
+                restTemplate.getForEntity(adicionarCartaoCompraUrl, String.class);
+                return ResponseEntity.ok(usuarioBody);
+            }
+            return ResponseEntity.status(500).body("Ocorreu um erro interno do servidor: Não foi adicionado o dependente");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Ocorreu um erro interno do servidor: " + e.getMessage());
         }
-        return principalOp.get();
-    }
-    public List<Principal> getAllPrincipal() {
-        return principalRepository.findAll();
     }
 
-    public List<Dependente> getAllDependente() {
-        return dependenteRepository.findAll();
+    public ResponseEntity<String> criarPrincipal(CadastroPrincipalRequest  dto) {
+        String criarUsuarioUrl = apiService.getCriarUsuario().getUrl();
+        String adicionarCartaoCompraUrl = apiService.getAdicionarCartaoCompra().getUrl();
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        try {
+            HttpEntity<CadastroPrincipalRequest> dtoToJson = new HttpEntity<>(dto, headers);
+
+            ResponseEntity<String> usuario = restTemplate.exchange(
+                    criarUsuarioUrl,
+                    HttpMethod.POST,
+                    dtoToJson,
+                    String.class
+            );
+
+            if (usuario.getStatusCode().is2xxSuccessful()) {
+                String usuarioBody = usuario.getBody();
+                restTemplate.getForEntity(adicionarCartaoCompraUrl, String.class);
+                return ResponseEntity.ok(usuarioBody);
+            }
+            return ResponseEntity.status(500).body("Ocorreu um erro interno do servidor: Não foi criado o usario");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Ocorreu um erro interno do servidor: " + e.getMessage());
+        }
     }
 }
