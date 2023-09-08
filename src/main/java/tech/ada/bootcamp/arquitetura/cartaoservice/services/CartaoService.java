@@ -41,7 +41,8 @@ public class CartaoService {
                 cartaoCadastrado.getDiaVencimento(),
                 cartaoCadastrado.getTipoCartao(),
                 titular.getNome(),
-                endereco.dto()
+                endereco.dto(),
+                cartaoCadastrado.getVencimentoCartao()
                 );
     }
 
@@ -61,7 +62,8 @@ public class CartaoService {
                 cartaoCadastrado.getDiaVencimento(),
                 cartaoCadastrado.getTipoCartao(),
                 titular.getNome(),
-                endereco.dto()
+                endereco.dto(),
+                cartaoCadastrado.getVencimentoCartao()
         );
     }
 
